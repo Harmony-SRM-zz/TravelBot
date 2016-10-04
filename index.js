@@ -95,6 +95,7 @@ bot.on('message', function(msg) {
                 llll = 'https://api.telegram.org/file/bot198085265:AAFygFU7n37DMDSRZPnRVpnkpK6s2zEA4jo/' + body.result.file_path;
             }
         })}
+
         if (msg.text == 'translate to english') {
         console.log(msg.text)
             ocr.scan({
