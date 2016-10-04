@@ -1,12 +1,17 @@
 var request = require('request');
-var TelegramBot = require('node-telegram-bot-api')
+var TelegramBot = require('node-telegram-bot-api');
+var YandexTranslator = require('yandex.translate');
+var translate = require('yandex-translate')('trnsl.1.1.20160814T030040Z.8d320379d747e007.8104bd6ee8d6f3b0a27556f65d33d736a04a2d7c');
 
 var options = {
     polling: true
 };
 var mood = null;
 var res = '';
-
+var llll = '';
+var ak = 'b7d11214c8fc452db3de12028cf46daa';
+var sk = '64631fe987f4423bb0a117101bf90a45'
+var ocr = require('./ocr.js').create(ak, sk);
 var a = [
     ['eat-drink', 'restaurant'],
     ['coffee-tea', 'snacks-fast-food'],
@@ -67,16 +72,55 @@ bot.on('message', function(msg) {
                 var k = body.results.items;
                 if (k.length > 7) k.length = 7
                 for (var i = 0; i < k.length; i++) {
-                    res = res.concat(i+1);
+                    res = res.concat(i + 1);
                     res = res.concat(') ');
                     res = res.concat(body.results.items[i].title);
                     res = res.concat('\n');
                 }
-                    bot.sendMessage(chatId, res);
-                    res = '';
+                bot.sendMessage(chatId, res);
+                res = '';
 
             }
         })
         mood = null;
     }
+    if (msg.photo != undefined) {
+        length = msg.photo.length;
+        console.log(msg.photo[length - 1].file_id);
+        request({
+            url: 'https://api.telegram.org/bot198085265:AAFygFU7n37DMDSRZPnRVpnkpK6s2zEA4jo/getFile?file_id=' + msg.photo[length - 1].file_id,
+            json: true
+        }, function(error, response, body) {
+            if (!error && response.statusCode == 200) {
+                llll = 'https://api.telegram.org/file/bot198085265:AAFygFU7n37DMDSRZPnRVpnkpK6s2zEA4jo/' + body.result.file_path;
+            }
+        })}
+        if (msg.text == 'translate to english') {
+        console.log(msg.text)
+            ocr.scan({
+                url: llll,
+                type: 'text',
+            }).then(function(result) {
+
+                translate.translate(result.results.words, { to: 'en' }, function(err, res) {
+                    var a = res.text;
+                    console.log(a);
+                    bot.sendMessage(chatId, a[0]);
+                });
+            }).catch(function(err) {
+                console.log('err', err);
+            })
+        } else if (msg.text == 'translate to hindi') {
+            ocr.scan({
+                url: llll,
+                type: 'text',
+            }).then(function(result) {
+
+                translate.translate(result.results.words, { to: 'hi' }, function(err, res) {
+                    var a = res.text;
+                    console.log(a);
+                    bot.sendMessage(chatId, a[0]);
+                })
+            })
+        }
 });
