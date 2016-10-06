@@ -134,7 +134,7 @@ $to = new SendGrid\Email(null, $email);
 $content = new SendGrid\Content("text/html", $message);
 $mail = new SendGrid\Mail($from, $subject, $to, $content);
 
-$apiKey = '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';
+$apiKey = '';
 $sg = new \SendGrid($apiKey);
 
 $response = $sg->client->mail()->send()->post($mail);
