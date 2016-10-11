@@ -9,8 +9,8 @@ var options = {
 var mood = null;
 var res = '';
 var llll = '';
-var ak = 'b7d11214c8fc452db3de12028cf46daa';
-var sk = '64631fe987f4423bb0a117101bf90a45'
+var ak = '';
+var sk = ''
 var ocr = require('./ocr.js').create(ak, sk);
 var a = [
     ['eat-drink', 'restaurant'],
@@ -24,7 +24,7 @@ var a = [
     ['administrative-areas-buildings']
 ];
 
-var token = '198085265:AAFygFU7n37DMDSRZPnRVpnkpK6s2zEA4jo';
+var token = '';
 var deal = 0;
 var bot = new TelegramBot(token, options);
 bot.getMe().then(function(me) {
@@ -73,19 +73,6 @@ bot.onText(/\/video (.+)/, function(msg, match) {
                 }
 
             }
-            //console.log(myJsonString[0]);
-            // var i = 0;
-            // while(i<myJsonString.length){
-            //   j = i;
-            //   var num = '';
-            //   while (myJsonString[j] >=0 && myJsonString[j] <= 9){
-            //     num = num.concat(myJsonString[j]);
-            //     j += 1;
-            //   }
-            //    i += 1;
-            // }
-
-
            var spl = myJsonString.split("\"");
            var nums = [];
            var i = 1
